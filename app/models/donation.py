@@ -1,4 +1,5 @@
-from sqlalchemy import Column, ForeignKey, Text, Integer
+from sqlalchemy import Column, ForeignKey, Integer, Text
+
 from app.core.db import Base, ProjectDonationMixin
 
 

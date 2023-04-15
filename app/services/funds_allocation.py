@@ -1,11 +1,11 @@
-from typing import Union
 from datetime import datetime
+from typing import Union
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.expression import false
 
-from app.models import Donation, CharityProject
+from app.models import CharityProject, Donation
 
 
 async def invested_procces(
