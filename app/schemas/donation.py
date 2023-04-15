@@ -15,8 +15,6 @@ class DonationCreate(DonationBase):
 
 class DonationDB(DonationBase):
     id: int
-    # comment: Optional[str]
-    # full_amount: int
     create_date: datetime
 
     class Config:

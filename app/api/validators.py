@@ -30,15 +30,6 @@ async def check_project_exists(
     return project
 
 
-# async def check_reservation_intersections(**kwargs) -> None:
-#     reservations = await reservation_crud.get_reservations_at_the_same_time(**kwargs)
-#     if reservations:
-#         raise HTTPException(
-#             status_code=422,
-#             detail=str(reservations)
-#         )
-
-
 async def check_project_before_delete(
         project_id: int,
         session: AsyncSession
