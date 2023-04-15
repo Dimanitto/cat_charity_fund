@@ -1,5 +1,4 @@
-from pydantic import BaseSettings, EmailStr
-from typing import Optional
+from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
