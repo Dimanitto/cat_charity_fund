@@ -1,6 +1,6 @@
-from typing import Optional, Union
+from typing import Union
 
-from fastapi import Depends, Request
+from fastapi import Depends
 from fastapi_users import (
     BaseUserManager, FastAPIUsers, IntegerIDMixin, InvalidPasswordException
 )
@@ -20,21 +20,15 @@ async def get_user_db(session: AsyncSession = Depends(get_async_session)):
     yield SQLAlchemyUserDatabase(session, User)
 
 
-# Определяем транспорт: передавать токен будем
-# через заголовок HTTP-запроса Authorization: Bearer. 
-# Указываем URL эндпоинта для получения токена.
 bearer_transport = BearerTransport(tokenUrl='auth/jwt/login')
 
-# Определяем стратегию: хранение токена в виде JWT.
+
 def get_jwt_strategy() -> JWTStrategy:
-    # В специальный класс из настроек приложения
-    # передаётся секретное слово, используемое для генерации токена.
-    # Вторым аргументом передаём срок действия токена в секундах.
     return JWTStrategy(secret=settings.secret, lifetime_seconds=3600)
 
-# Создаём объект бэкенда аутентификации с выбранными параметрами.
+
 auth_backend = AuthenticationBackend(
-    name='jwt',  # Произвольное имя бэкенда (должно быть уникальным).
+    name='jwt',
     transport=bearer_transport,
     get_strategy=get_jwt_strategy,
 )
@@ -55,7 +49,6 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
             )
 
 
-# Корутина, возвращающая объект класса UserManager.
 async def get_user_manager(user_db=Depends(get_user_db)):
     yield UserManager(user_db)
 

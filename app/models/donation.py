@@ -1,5 +1,4 @@
 from sqlalchemy import Column, ForeignKey, Text, Integer
-from sqlalchemy.orm import relationship
 from app.core.db import Base, ProjectDonationMixin
 
 

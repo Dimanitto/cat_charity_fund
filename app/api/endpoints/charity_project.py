@@ -1,42 +1,37 @@
 from typing import List
+
 from fastapi import APIRouter, Depends
-# Импортируем класс асинхронной сессии для аннотации параметра.
 from sqlalchemy.ext.asyncio import AsyncSession
 
-# Импортируем асинхронный генератор сессий.
+from app.api.validators import (check_name_duplicate,
+                                check_project_before_delete,
+                                check_project_before_update)
 from app.core.db import get_async_session
-# from app.crud.meeting_room import meeting_room_crud
+from app.core.user import current_superuser
 from app.crud.charity_project import charity_project_crud
-from app.schemas.charity_project import (
-    CharityProjectDB, CharityProjectCreate, CharityProjectUpdate
-)
-from app.api.validators import check_project_exists, check_name_duplicate
-from app.core.user import current_superuser, current_user
-from app.models import User
-from app.services.funds_allocation import invested_project
-from app.api.validators import check_project_before_delete, check_project_before_update
-
+from app.schemas.charity_project import (CharityProjectCreate,
+                                         CharityProjectDB,
+                                         CharityProjectUpdate)
+from app.services.funds_allocation import invested_procces
 
 router = APIRouter()
 
 
 @router.post(
     '/',
-    # Указываем схему ответа.
     response_model=CharityProjectDB,
     response_model_exclude_none=True,
-    # TODO потом разкомментить
     dependencies=[Depends(current_superuser)],
 )
 async def create_new_project(
         project: CharityProjectCreate,
-        # Указываем зависимость, предоставляющую объект сессии, как параметр функции.
         session: AsyncSession = Depends(get_async_session),
 ):
     await check_name_duplicate(project.name, session)
     new_project = await charity_project_crud.create(project, session)
-    new_project = await invested_project(session, new_project)
+    new_project = await invested_procces(session, new_project)
     return new_project
+
 
 @router.get(
     '/',
@@ -49,10 +44,10 @@ async def get_all_projects(
     all_projects = await charity_project_crud.get_multi(session)
     return all_projects
 
+
 @router.delete(
     '/{project_id}',
     response_model=CharityProjectDB,
-    # TODO потом разкомментить
     dependencies=[Depends(current_superuser)],
 )
 async def delete_project(
@@ -65,10 +60,10 @@ async def delete_project(
     project = await charity_project_crud.remove(db_obj=project, session=session)
     return project
 
+
 @router.patch(
     '/{project_id}',
     response_model=CharityProjectDB,
-    # TODO потом разкомментить
     dependencies=[Depends(current_superuser)],
 )
 async def update_project(

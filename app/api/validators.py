@@ -1,10 +1,8 @@
 from fastapi import HTTPException
-from typing import Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.crud.donation import donation_crud
 from app.crud.charity_project import charity_project_crud
-from app.models import Donation, CharityProject, User
+from app.models import CharityProject
 
 
 async def check_name_duplicate(
@@ -18,7 +16,7 @@ async def check_name_duplicate(
             detail='Проект с таким именем уже существует!',
         )
 
-        
+
 async def check_project_exists(
         project_id: int,
         session: AsyncSession,

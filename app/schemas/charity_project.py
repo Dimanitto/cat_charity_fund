@@ -29,12 +29,11 @@ class CharityProjectUpdate(BaseModel):
         extra = Extra.forbid
         schema_extra = {
             'example': {
-                'name': 'Спасибо "прекрасным" тестам',
-                'description': 'Вводящее в заблуждение сообщением о ошибке',
+                'name': 'Автосалон для кошек',
+                'description': 'Когда нибудь в будущем',
                 'full_amount': 100
             }
         }
-
 
 
 class CharityProjectDB(CharityProjectBase):
